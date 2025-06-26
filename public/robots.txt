@@ -1,0 +1,20 @@
+# *
+User-agent: *
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /signup
+Disallow: /update-password
+Disallow: /providers
+Disallow: /login
+Disallow: /api
+Disallow: /api/*
+
+# Googlebot
+User-agent: Googlebot
+Allow: /
+
+# Host
+Host: https://www.laperitum.com
+
+# Sitemaps
+Sitemap: https://www.laperitum.com/sitemap.xml
