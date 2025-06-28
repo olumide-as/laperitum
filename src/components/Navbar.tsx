@@ -36,7 +36,7 @@ const Navbar = () => {
   const isActive = (path: string) => pathname === path;
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: '/admin/login' });
+    await signOut({ callbackUrl: 'https://laperitum.com/admin/login' });
     closeMobileMenu();
   };
 

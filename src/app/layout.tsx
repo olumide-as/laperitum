@@ -15,7 +15,7 @@ interface RootLayoutProps {
 export const metadata = {
   title: "La Peritum Law Practice | Legal Experts in Nigeria",
   description:
-  "La Peritum Law Practice provides expert legal and corporate advisory services in Nigeria, with specialisation in litigation, dispute resolution, and more.",
+    "La Peritum Law Practice provides expert legal and corporate advisory services in Nigeria, with specialisation in litigation, dispute resolution, and more.",
   keywords: [
     "La Peritum Law Practice",
     "Legal services Nigeria",
@@ -28,9 +28,7 @@ export const metadata = {
     "Legal consultancy Nigeria",
     "Legal advice Nigeria",
   ].join(", "),
-  authors: [
-    { name: "La Peritum Law Practice", url: "https://www.laperitum.com" }
-  ],
+  authors: [{ name: "La Peritum Law Practice", url: "https://www.laperitum.com" }],
   creator: "La Peritum Law Practice",
   publisher: "La Peritum Law Practice",
   openGraph: {
@@ -60,17 +58,23 @@ export const metadata = {
   alternates: {
     canonical: "https://www.laperitum.com",
   },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" className={inter.className}>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body className="scroll-smooth font-inter bg-white">
-  <SessionProviderWrapper>
-    <Navbar />
-    {children}
-    <Footer />
-  </SessionProviderWrapper>
+        <SessionProviderWrapper>
+          <Navbar />
+          {children}
+          <Footer />
+        </SessionProviderWrapper>
       </body>
     </html>
   );
