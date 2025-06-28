@@ -4,7 +4,7 @@ import FAQ from "./faq"; // Make sure you have an FAQ component in the same fold
 export const metadata: Metadata = {
   title: "FAQ | La Peritum Law Practice",
   description:
-    "Find answers to frequently asked questions about La Peritum Law Practice’s legal services, consultations, and client support.",
+    "Find answers to frequently asked questions about La Peritum Law Practice’s legal services, consultations, and how we support clients across various legal areas.",
   alternates: {
     canonical: "https://laperitum.com/faq",
   },

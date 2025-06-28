@@ -4,7 +4,7 @@ import Contact from "./contact"; // Ensure you have a Contact component in the s
 export const metadata: Metadata = {
   title: "Contact Us | La Peritum Law Practice",
   description:
-    "Need expert legal guidance? Contact La Peritum Law Practice to schedule a consultation. We're here to support your legal and business needs with professionalism and dedication.",
+    "Need expert legal guidance? Contact La Peritum Law Practice for a consultation. We support your legal and business needs with professionalism.",
   alternates: {
     canonical: "https://laperitum.com/contact",
   },

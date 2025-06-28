@@ -1,0 +1,27 @@
+# ✅ Allow static access to /uploads
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_URI} ^/uploads/
+  RewriteRule ^ - [L]
+</IfModule>
+
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/laperitu/domains/laperitum.com/public_html"
+PassengerBaseURI "/"
+PassengerNodejs "/home/laperitu/nodevenv/domains/laperitum.com/public_html/20/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+PassengerAppLogFile "/home/laperitu/passenger.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/laperitu/domains/laperitum.com/public_html"
+PassengerBaseURI "/"
+PassengerNodejs "/home/laperitu/nodevenv/domains/laperitum.com/public_html/20/bin/node"
+PassengerAppType node
+PassengerStartupFile server.js
+PassengerAppLogFile "/home/laperitu/passenger.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION BEGIN
+<IfModule Litespeed>
+</IfModule>
+# DO NOT REMOVE OR MODIFY. CLOUDLINUX ENV VARS CONFIGURATION END

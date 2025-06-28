@@ -13,9 +13,9 @@ interface RootLayoutProps {
 }
 
 export const metadata = {
-  title: "La Peritum Law Practice – Expert Legal & Corporate Advisory Services in Nigeria",
+  title: "La Peritum Law Practice | Legal Experts in Nigeria",
   description:
-    "La Peritum Law Practice offers comprehensive legal and corporate advisory services across Nigeria. Expert lawyers specialized in litigation, corporate law, dispute resolution, and more.",
+  "La Peritum Law Practice provides expert legal and corporate advisory services in Nigeria, with specialisation in litigation, dispute resolution, and more.",
   keywords: [
     "La Peritum Law Practice",
     "Legal services Nigeria",
