@@ -60,7 +60,7 @@ export async function PATCH(req: NextRequest) {
     let imagePath = existingImage || "";
 
     // Handle new file upload
-    if (imageFile && imageFile.size > 0) {
+    if (imageFile && imageFile instanceof File && imageFile.size > 0) {
       // Validate file size
       if (imageFile.size > MAX_FILE_SIZE) {
         return NextResponse.json(

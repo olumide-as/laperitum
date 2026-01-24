@@ -37,7 +37,7 @@ export default function EditPublicationClient({ id }: Props) {
   const [isSaving, setIsSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isPreview, setIsPreview] = useState(false);
-  const [useImageUrl, setUseImageUrl] = useState(false);
+  const [imageMode, setImageMode] = useState<'keep' | 'upload' | 'url'>('keep');
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -97,8 +97,13 @@ export default function EditPublicationClient({ id }: Props) {
     if (formData.content.trim().length < MIN_CONTENT_LENGTH) {
       newErrors.content = `Content must be at least ${MIN_CONTENT_LENGTH} characters`;
     }
-    if (!formData.image && !formData.imageUrl && !formData.existingImage) {
-      newErrors.image = "Image is required (upload, URL, or keep existing)";
+    
+    if (imageMode === 'upload' && !formData.image) {
+      newErrors.image = "Please select a file to upload";
+    } else if (imageMode === 'url' && !formData.imageUrl) {
+      newErrors.image = "Please enter a valid image URL";
+    } else if (imageMode === 'keep' && !formData.existingImage) {
+      newErrors.image = "No existing image to keep";
     }
 
     setErrors(newErrors);
@@ -168,11 +173,11 @@ export default function EditPublicationClient({ id }: Props) {
     form.append("content", formData.content.trim());
     form.append("datePublished", new Date().toISOString());
     
-    if (formData.image) {
+    if (imageMode === 'upload' && formData.image) {
       form.append("image", formData.image);
-    } else if (formData.imageUrl) {
+    } else if (imageMode === 'url' && formData.imageUrl) {
       form.append("imageUrl", formData.imageUrl);
-    } else if (formData.existingImage) {
+    } else if (imageMode === 'keep' && formData.existingImage) {
       form.append("existingImage", formData.existingImage);
     }
 
@@ -319,9 +324,9 @@ export default function EditPublicationClient({ id }: Props) {
                     <input
                       type="radio"
                       name="imageType"
-                      checked={!useImageUrl && !formData.image}
+                      checked={imageMode === 'keep'}
                       onChange={() => {
-                        setUseImageUrl(false);
+                        setImageMode('keep');
                         setFormData((prev) => ({ ...prev, image: null, imageUrl: "" }));
                       }}
                       className="mr-2"
@@ -332,10 +337,10 @@ export default function EditPublicationClient({ id }: Props) {
                     <input
                       type="radio"
                       name="imageType"
-                      checked={!useImageUrl && formData.image !== null}
+                      checked={imageMode === 'upload'}
                       onChange={() => {
-                        setUseImageUrl(false);
-                        setFormData((prev) => ({ ...prev, imageUrl: "" }));
+                        setImageMode('upload');
+                        setFormData((prev) => ({ ...prev, image: null, imageUrl: "" }));
                       }}
                       className="mr-2"
                     />
@@ -345,9 +350,9 @@ export default function EditPublicationClient({ id }: Props) {
                     <input
                       type="radio"
                       name="imageType"
-                      checked={useImageUrl}
+                      checked={imageMode === 'url'}
                       onChange={() => {
-                        setUseImageUrl(true);
+                        setImageMode('url');
                         setFormData((prev) => ({ ...prev, image: null }));
                       }}
                       className="mr-2"
@@ -357,7 +362,7 @@ export default function EditPublicationClient({ id }: Props) {
                 </div>
 
                 {/* File Upload */}
-                {formData.image !== null && !useImageUrl && (
+                {imageMode === 'upload' && (
                   <div>
                     <input
                       type="file"
@@ -373,7 +378,7 @@ export default function EditPublicationClient({ id }: Props) {
                 )}
 
                 {/* Image URL */}
-                {useImageUrl && (
+                {imageMode === 'url' && (
                   <div>
                     <input
                       type="url"
