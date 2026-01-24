@@ -68,6 +68,37 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="en" className={inter.className}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        {/* Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LegalService",
+              name: "La Peritum Law Practice",
+              image: "https://www.laperitum.com/assets/logo.svg",
+              description:
+                "Expert legal and corporate advisory services in Nigeria specializing in litigation, dispute resolution, corporate governance, and fintech law.",
+              url: "https://www.laperitum.com",
+              telephone: "",
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "",
+                addressLocality: "Lagos",
+                addressRegion: "Lagos",
+                postalCode: "",
+                addressCountry: "NG",
+              },
+              areaServed: ["NG"],
+              priceRange: "$$",
+              sameAs: [
+                "https://www.facebook.com/LaPeritumLaw",
+                "https://www.linkedin.com/company/laperitum-law-practice",
+                "https://twitter.com/LaPeritumLaw",
+              ],
+            }),
+          }}
+        />
       </head>
       <body className="scroll-smooth font-inter bg-white">
         <SessionProviderWrapper>

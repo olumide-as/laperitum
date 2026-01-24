@@ -4,13 +4,15 @@ import { writeFile } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 function getIdFromUrl(req: NextRequest): number | null {
   const url = new URL(req.url);
   const idString = url.pathname.split("/").pop();
   const id = Number(idString);
   return isNaN(id) ? null : id;
 }
-// ✅ GET a single publication by ID using context
+
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const id = Number(url.pathname.split('/').pop());
@@ -47,29 +49,50 @@ export async function PATCH(req: NextRequest) {
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
     const datePublished = formData.get("datePublished") as string;
-    const image = formData.get("image") as File | null;
+    const imageFile = formData.get("image") as File | null;
+    const imageUrl = formData.get("imageUrl") as string | null;
     const existingImage = formData.get("existingImage") as string | null;
 
+    // Validation
     if (!title || !content || !datePublished) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
     let imagePath = existingImage || "";
 
-    if (image && image.size > 0) {
-      const bytes = await image.arrayBuffer();
+    // Handle new file upload
+    if (imageFile && imageFile.size > 0) {
+      // Validate file size
+      if (imageFile.size > MAX_FILE_SIZE) {
+        return NextResponse.json(
+          { error: "File size exceeds 5MB limit" },
+          { status: 400 }
+        );
+      }
+
+      // Validate file type
+      if (!imageFile.type.startsWith("image/")) {
+        return NextResponse.json(
+          { error: "Invalid file type. Please upload an image." },
+          { status: 400 }
+        );
+      }
+
+      const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const fileName = `${randomUUID()}-${image.name}`;
+      const fileName = `${randomUUID()}-${imageFile.name}`;
       const filePath = path.join(process.cwd(), "public", "uploads", fileName);
       await writeFile(filePath, buffer);
       imagePath = `/uploads/${fileName}`;
+    } else if (imageUrl) {
+      imagePath = imageUrl;
     }
 
     const updated = await prisma.publication.update({
       where: { id },
       data: {
-        title,
-        content,
+        title: title.trim(),
+        content: content.trim(),
         datePublished: new Date(datePublished),
         image: imagePath,
       },

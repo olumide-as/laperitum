@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Read the legal disclaimer of La Peritum Law Practice. Understand liability limitations and the informational purpose of content provided on this website.",
   alternates: {
-    canonical: "https://laperitum.com/disclaimer",
+    canonical: "https://www.laperitum.com/disclaimer",
   },
 };
 

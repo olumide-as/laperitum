@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "La Peritum Law Practice is a full-service firm offering legal and corporate advisory across industries. Discover our mission, values, and expertise.",
   alternates: {
-    canonical: "https://laperitum.com/about",
+    canonical: "https://www.laperitum.com/about",
   },
 };
 

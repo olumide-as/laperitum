@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Stay informed with legal insights from La Peritum Law Practice. Explore articles on corporate governance, fintech, intellectual property, and more.",
   alternates: {
-    canonical: "https://laperitum.com/publications",
+    canonical: "https://www.laperitum.com/publications",
   },
 };
 

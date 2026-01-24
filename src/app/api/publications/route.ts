@@ -5,6 +5,8 @@ import path from 'path';
 import { randomUUID } from 'crypto';
 import slugify from 'slugify';
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
 export async function GET() {
   try {
     const publications = await prisma.publication.findMany({
@@ -27,28 +29,63 @@ export async function POST(req: NextRequest) {
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
     const datePublished = formData.get('datePublished') as string;
-    const image = formData.get('image') as File;
+    const imageFile = formData.get('image') as File | null;
+    const imageUrl = formData.get('imageUrl') as string | null;
 
-    if (!title || !content || !datePublished || !image) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    // Validation
+    if (!title || !content || !datePublished) {
+      return NextResponse.json(
+        { error: 'Missing required fields: title, content, datePublished' },
+        { status: 400 }
+      );
     }
 
-    // Save uploaded image
-    const bytes = await image.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const fileName = `${randomUUID()}-${image.name}`;
-    const filePath = path.join(process.cwd(), 'public', 'uploads', fileName);
-    await writeFile(filePath, buffer);
+    if (!imageFile && !imageUrl) {
+      return NextResponse.json(
+        { error: 'Either image file or imageUrl is required' },
+        { status: 400 }
+      );
+    }
+
+    let imagePath = '';
+
+    // Handle file upload
+    if (imageFile) {
+      // Validate file size
+      if (imageFile.size > MAX_FILE_SIZE) {
+        return NextResponse.json(
+          { error: 'File size exceeds 5MB limit' },
+          { status: 400 }
+        );
+      }
+
+      // Validate file type
+      if (!imageFile.type.startsWith('image/')) {
+        return NextResponse.json(
+          { error: 'Invalid file type. Please upload an image.' },
+          { status: 400 }
+        );
+      }
+
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const fileName = `${randomUUID()}-${imageFile.name}`;
+      const filePath = path.join(process.cwd(), 'public', 'uploads', fileName);
+      await writeFile(filePath, buffer);
+      imagePath = `/uploads/${fileName}`;
+    } else if (imageUrl) {
+      imagePath = imageUrl;
+    }
 
     const slug = slugify(title, { lower: true, strict: true });
 
     const publication = await prisma.publication.create({
       data: {
-        title,
+        title: title.trim(),
         slug,
-        content,
+        content: content.trim(),
         datePublished: new Date(datePublished),
-        image: `/uploads/${fileName}`,
+        image: imagePath,
       },
     });
 

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Find answers to frequently asked questions about La Peritum Law Practice’s legal services, consultations, and how we support clients across various legal areas.",
   alternates: {
-    canonical: "https://laperitum.com/faq",
+    canonical: "https://www.laperitum.com/faq",
   },
 };
 

@@ -4,8 +4,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Publication {
@@ -14,15 +15,13 @@ model Publication {
   slug          String   @unique
   content       String    @db.Text
   image         String?   @db.VarChar(255)
-  datePublished DateTime? @default(now()) @db.DateTime(0)
+  datePublished DateTime? @default(now())
 
-    @@map("publications") // 👈 tells Prisma to map to the existing 'publications' table
-
+  @@map("publications")
 }
 
 model User {
   id       Int    @id @default(autoincrement())
   username String @unique
   password String
-  // other fields as needed
 }

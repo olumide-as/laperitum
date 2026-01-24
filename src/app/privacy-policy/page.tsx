@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description:
     "Learn how La Peritum Law Practice collects, uses, and safeguards your personal data in line with Nigerian privacy regulations and global best practices.",
   alternates: {
-    canonical: "https://laperitum.com/privacy-policy",
+    canonical: "https://www.laperitum.com/privacy-policy",
   },
 };
 

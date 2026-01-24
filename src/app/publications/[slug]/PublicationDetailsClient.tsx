@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import {
   faFacebook,
   faLinkedin,
@@ -28,6 +29,48 @@ export default function PublicationDetailsClient({
   publication,
   latestPublications,
 }: Props) {
+  // Add JSON-LD structured data
+  useEffect(() => {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    const pageUrl = `${baseUrl}/publications/${publication.slug}`;
+
+    const articleSchema = {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      headline: publication.title,
+      description: publication.content
+        .replace(/<[^>]*>/g, "")
+        .substring(0, 160),
+      image: publication.image || `${baseUrl}/assets/og-image.png`,
+      datePublished: new Date(publication.datePublished).toISOString(),
+      author: {
+        "@type": "Organization",
+        name: "La Peritum Law Practice",
+        url: baseUrl,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "La Peritum Law Practice",
+        logo: {
+          "@type": "ImageObject",
+          url: `${baseUrl}/assets/logo.svg`,
+        },
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": pageUrl,
+      },
+    };
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify(articleSchema);
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, [publication]);
   // Format date helper
   const formatDate = (date: string | Date) =>
     new Date(date).toLocaleDateString("en-US", {
