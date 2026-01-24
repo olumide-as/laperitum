@@ -23,6 +23,7 @@
     "@tiptap/react": "^2.22.3",
     "@tiptap/starter-kit": "^2.22.3",
     "@upstash/ratelimit": "^2.0.8",
+    "@vercel/blob": "^2.0.1",
     "bcrypt": "^6.0.0",
     "emoji-picker-react": "^4.17.1",
     "mysql2": "^3.14.1",

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { writeFile } from "fs/promises";
-import path from "path";
+import { put } from "@vercel/blob";
 import { randomUUID } from "crypto";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -81,9 +80,20 @@ export async function PATCH(req: NextRequest) {
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
       const fileName = `${randomUUID()}-${imageFile.name}`;
-      const filePath = path.join(process.cwd(), "public", "uploads", fileName);
-      await writeFile(filePath, buffer);
-      imagePath = `/uploads/${fileName}`;
+      
+      try {
+        const blob = await put(fileName, buffer, {
+          access: 'public',
+          addRandomSuffix: false,
+        });
+        imagePath = blob.url;
+      } catch (error) {
+        console.error('Error uploading to Vercel Blob:', error);
+        return NextResponse.json(
+          { error: 'Failed to upload image' },
+          { status: 500 }
+        );
+      }
     } else if (imageUrl) {
       imagePath = imageUrl;
     }
